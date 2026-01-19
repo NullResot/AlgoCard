@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>算法卡片 AlgoCard</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div>
+        <h1>算法卡片（AlgoCard）</h1>
+        <div class="meta-notes">
+          <span>作者：Resot</span>
+          <span>算法数据源：OIWiki</span>
+        </div>
+        <p class="lede">
+          按层次与领域多重筛选，点击算法即可标记掌握情况，并导出当前形状或思维导图视图。
+        </p>
+      </div>
+      <div class="stats" id="statBoard">
+        <div class="stat-card">
+          <p class="label">总算法</p>
+          <p class="value" id="stat-total">0</p>
+        </div>
+        <div class="stat-card">
+          <p class="label">当前可见</p>
+          <p class="value" id="stat-visible">0</p>
+        </div>
+        <div class="stat-card">
+          <p class="label">已标记</p>
+          <p class="value" id="stat-selected">0</p>
+        </div>
+      </div>
+    </header>
+
+    <section class="filters">
+      <div class="filter-row">
+        <div class="filter-block">
+          <p class="filter-title">搜索</p>
+          <input id="searchInput" type="search" placeholder="按算法名、标签、分支搜索…" />
+        </div>
+        <div class="filter-block">
+          <p class="filter-title">层次</p>
+          <div class="pill-row" id="levelFilters"></div>
+        </div>
+        <div class="filter-block">
+          <p class="filter-title">分类</p>
+          <div class="pill-row" id="categoryFilters"></div>
+        </div>
+      </div>
+    </section>
+
+    <main class="layout">
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <p class="eyebrow">算法列表</p>
+            <h2>点击标记掌握 / 未掌握</h2>
+          </div>
+        </div>
+        <div class="controls-row">
+          <div class="left-controls">
+            <div class="mode-switch">
+              <button class="mode-btn active" data-mode="levels">层次分类模式</button>
+              <button class="mode-btn" data-mode="category">算法分类模式</button>
+            </div>
+            <div class="mode-exports">
+              <button class="btn primary" data-mode-export="png">导出分类模式图片</button>
+              <button class="btn pdf" data-mode-export="pdf">导出分类模式PDF</button>
+            </div>
+          </div>
+          <div class="right-controls">
+            <div class="panel-actions grid-six">
+              <button class="btn secondary" id="showSelected">显示已选</button>
+              <button class="btn secondary" id="showUnselected">显示未选</button>
+              <button class="btn secondary" id="selectAllVisible">全选当前可见</button>
+              <button class="btn secondary" id="invertVisible">反选当前可见</button>
+              <button class="btn primary" id="resetSelections">清空选中</button>
+              <button class="btn ghost" id="resetFilters">清空筛选</button>
+            </div>
+          </div>
+        </div>
+        <div id="algorithmList" class="algo-list"></div>
+        <div id="mindMapView" class="mindmap hidden"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+  <script id="fallback-data" type="application/json"></script>
+  <script src="app.js"></script>
+</body>
+</html>
