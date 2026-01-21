@@ -44,7 +44,14 @@ const FALLBACK_ALGORITHMS = [
     "name": "模拟 (Simulation)",
     "category": "基础算法",
     "group": "模拟",
-    "level": "入门"
+    "level": "普及"
+  },
+  {
+    "id": "brute-force",
+    "name": "暴力 (Brute Force)",
+    "category": "基础算法",
+    "group": "暴力",
+    "level": "普及"
   },
   {
     "id": "recursion",
@@ -68,11 +75,25 @@ const FALLBACK_ALGORITHMS = [
     "level": "普及"
   },
   {
-    "id": "sorting-basic",
-    "name": "选择/冒泡/插入排序",
+    "id": "selection-sort",
+    "name": "选择排序 (Selection Sort)",
     "category": "基础算法",
     "group": "排序",
-    "level": "入门"
+    "level": "普及"
+  },
+  {
+    "id": "bubble-sort",
+    "name": "冒泡排序 (Bubble Sort)",
+    "category": "基础算法",
+    "group": "排序",
+    "level": "普及"
+  },
+  {
+    "id": "insertion-sort",
+    "name": "插入排序 (Insertion Sort)",
+    "category": "基础算法",
+    "group": "排序",
+    "level": "普及"
   },
   {
     "id": "sorting-advanced",
@@ -198,14 +219,14 @@ const FALLBACK_ALGORITHMS = [
     "name": "遗传算法 / 粒子群",
     "category": "搜索",
     "group": "随机化",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "dlx",
     "name": "DLX (Dancing Links)",
     "category": "搜索",
     "group": "精确覆盖",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "knapsack-basic",
@@ -268,7 +289,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "插头 DP (轮廓线DP)",
     "category": "DP",
     "group": "插头DP",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "probability-dp",
@@ -282,7 +303,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "动态 DP",
     "category": "DP",
     "group": "动态DP",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "mono-queue-dp",
@@ -310,7 +331,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "决策单调性优化",
     "category": "DP",
     "group": "DP优化",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "string-hash",
@@ -352,7 +373,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "后缀自动机 (SAM)",
     "category": "字符串",
     "group": "后缀结构",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "suffix-balanced-tree",
@@ -366,7 +387,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "广义后缀自动机",
     "category": "字符串",
     "group": "后缀结构",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "manacher",
@@ -380,7 +401,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "回文自动机 (PAM)",
     "category": "字符串",
     "group": "回文",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "sequence-automaton",
@@ -401,7 +422,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "Lyndon 分解",
     "category": "字符串",
     "group": "技巧",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "bit-ops",
@@ -464,7 +485,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "杜教筛 / Min_25 筛",
     "category": "数学",
     "group": "数论",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "primitive-root-bsgs",
@@ -520,7 +541,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "Burnside / Polya 定理",
     "category": "数学",
     "group": "群论",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "fft-ntt",
@@ -541,21 +562,21 @@ const FALLBACK_ALGORITHMS = [
     "name": "多项式全家桶 (求逆/除法等)",
     "category": "数学",
     "group": "多项式",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "generating-function",
     "name": "生成函数",
     "category": "数学",
     "group": "组合数学",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "simplex",
     "name": "线性规划 (单纯形法)",
     "category": "数学",
     "group": "运筹学",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "nim-sg",
@@ -702,7 +723,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "可持久化平衡树 / Trie / 并查集",
     "category": "数据结构",
     "group": "可持久化",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "tree-of-trees",
@@ -716,7 +737,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "动态树 (LCT)",
     "category": "数据结构",
     "group": "动态树",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "kd-tree",
@@ -849,7 +870,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "圆方树",
     "category": "图论",
     "group": "连通性",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "two-sat",
@@ -898,7 +919,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "上下界网络流",
     "category": "图论",
     "group": "网络流",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "min-cut-closure",
@@ -926,7 +947,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "Matrix-Tree 定理",
     "category": "图论",
     "group": "矩阵树",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "prufer",
@@ -975,7 +996,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "三维计算几何 (三维凸包)",
     "category": "计算几何",
     "group": "三维",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "offline-cdq",
@@ -996,7 +1017,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "莫队算法 (树上/二次离线)",
     "category": "杂项",
     "group": "离线",
-    "level": "省选/NOI"
+    "level": "NOI"
   },
   {
     "id": "randomization",
