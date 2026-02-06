@@ -195,7 +195,7 @@ p {
 .pill.level-beginner { --pill-color: #fe4c61; } /* 入门 */
 .pill.level-regular { --pill-color: #ffc116; }  /* 普及 */
 .pill.level-advanced { --pill-color: #3498db; } /* 提高 */
-.pill.level-province { --pill-color: #9c3dcf; } /* 省�?*/
+.pill.level-province { --pill-color: #9c3dcf; } /* 省?*/
 .pill.level-noi { --pill-color: #0e1d69; }      /* NOI */
 .pill.level-ioi { --pill-color: #0e1d69; }
 .pill.level-neutral { --pill-color: rgba(255,255,255,0.2); }
@@ -319,14 +319,14 @@ p {
   min-width: 140px;
 }
 
-/* 右侧按钮配色与主风格统一，增强渐变对�?*/
+/* 右侧按钮配色与主风格统一，增强渐变对?*/
 .right-controls .btn { color: #0b1526; box-shadow: 0 12px 28px rgba(0,0,0,0.24); border: none; }
-.right-controls #showSelected { background: linear-gradient(130deg, #34d399, #22d3ee); }          /* 青绿→亮�?*/
-.right-controls #showUnselected { background: linear-gradient(130deg, #60a5fa, #818cf8); }        /* 天蓝→靛�?*/
+.right-controls #showSelected { background: linear-gradient(130deg, #34d399, #22d3ee); }          /* 青绿→亮?*/
+.right-controls #showUnselected { background: linear-gradient(130deg, #60a5fa, #818cf8); }        /* 天蓝→靛?*/
 .right-controls #selectAllVisible { background: linear-gradient(130deg, #fbbf24, #f97316); }      /* 金黄→橙 */
 .right-controls #invertVisible { background: linear-gradient(130deg, #f472b6, #c084fc); }         /* 玫红→紫 */
-.right-controls #resetSelections { background: linear-gradient(130deg, #22c55e, #0f9f4f); }       /* 亮绿→深�?*/
-.right-controls #resetFilters { background: linear-gradient(130deg, #cbd5e1, #475569); color: #0b1526; } /* 浅灰蓝→深灰�?*/
+.right-controls #resetSelections { background: linear-gradient(130deg, #22c55e, #0f9f4f); }       /* 亮绿→深?*/
+.right-controls #resetFilters { background: linear-gradient(130deg, #cbd5e1, #475569); color: #0b1526; } /* 浅灰蓝→深灰?*/
 
 .mode-exports {
   display: flex;
@@ -785,4 +785,125 @@ p {
 .star-btn:hover {
   transform: translateY(-1px);
   box-shadow: 0 12px 26px rgba(0,0,0,0.25);
+}
+
+/* Force white text during export capture */
+.export-render,
+.export-render * {
+  color: #f8fbff !important;
+  -webkit-text-fill-color: #f8fbff !important;
+}
+
+
+
+.mastery-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  margin: 6px 0 14px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.mastery-legend .legend-badge {
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-weight: 800;
+  color: #0b1526;
+  background: linear-gradient(120deg, #fbbf24, #f59e0b);
+}
+
+.mastery-legend strong {
+  color: #ffd166;
+  letter-spacing: 0.06em;
+}
+
+.level-item {
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.level-item-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.level-item .algo-name {
+  word-break: break-word;
+}
+
+.mindmap-node {
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.mindmap-node-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.mastery-stars {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.mastery-star {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: #8fa5c9;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.12s ease;
+}
+
+.mastery-star:hover {
+  border-color: rgba(255, 255, 255, 0.42);
+  color: #ffd166;
+  transform: translateY(-1px);
+}
+
+.mastery-star.active {
+  color: #ffd166;
+  border-color: rgba(255, 209, 102, 0.58);
+  background: rgba(255, 209, 102, 0.12);
+  box-shadow: 0 0 0 1px rgba(255, 209, 102, 0.16);
+}
+
+.mastery-stars.compact {
+  margin-left: 4px;
+}
+
+.mastery-stars.compact .mastery-star {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+@media (max-width: 900px) {
+  .mastery-legend {
+    align-items: flex-start;
+  }
 }

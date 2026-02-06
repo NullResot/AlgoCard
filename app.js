@@ -10,6 +10,11 @@ const state = {
     groupByCategory: false
   },
   selections: new Set(JSON.parse(localStorage.getItem('algomap:selected') || '[]')),
+  mastery: new Map(
+    Object.entries(JSON.parse(localStorage.getItem('algomap:mastery') || '{}'))
+      .map(([id, value]) => [id, Math.max(0, Math.min(3, Number(value) || 0))])
+      .filter(([, value]) => value > 0)
+  ),
   viewMode: 'levels'
 };
 
@@ -1139,24 +1144,37 @@ function bindControls() {
 
   el.resetSelections.addEventListener('click', () => {
     state.selections.clear();
+    state.mastery.clear();
     persistSelection();
+    persistMastery();
     render();
   });
 
   el.selectAllVisible.addEventListener('click', () => {
     const filtered = getFiltered();
-    filtered.forEach(item => state.selections.add(item.id));
+    let masteryChanged = false;
+    filtered.forEach(item => {
+      state.selections.add(item.id);
+      masteryChanged = ensureDefaultMastery(item.id) || masteryChanged;
+    });
     persistSelection();
+    if (masteryChanged) persistMastery();
     render();
   });
 
   el.invertVisible.addEventListener('click', () => {
     const filtered = getFiltered();
+    let masteryChanged = false;
     filtered.forEach(item => {
-      if (state.selections.has(item.id)) state.selections.delete(item.id);
-      else state.selections.add(item.id);
+      if (state.selections.has(item.id)) {
+        state.selections.delete(item.id);
+      } else {
+        state.selections.add(item.id);
+        masteryChanged = ensureDefaultMastery(item.id) || masteryChanged;
+      }
     });
     persistSelection();
+    if (masteryChanged) persistMastery();
     render();
   });
 
@@ -1280,7 +1298,25 @@ function renderLevels(list) {
         const chip = document.createElement('div');
         chip.className = 'level-item' + (state.selections.has(it.id) ? ' selected' : '');
         chip.dataset.id = it.id;
-        chip.innerHTML = `<span class="algo-name">${it.name}</span>${renderTag(it.level, LEVEL_CLASS[it.level] || '')}`;
+        chip.innerHTML = `
+          <div class="level-item-main">
+            <span class="algo-name">${it.name}</span>
+            ${renderTag(it.level, LEVEL_CLASS[it.level] || '')}
+          </div>
+          ${renderMasteryStars(it.id)}
+        `;
+        chip.querySelectorAll('.mastery-star').forEach(starBtn => {
+          starBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const value = Number(starBtn.dataset.value || 0);
+            const current = getMastery(it.id);
+            const next = current === value ? 1 : value;
+            setMastery(it.id, next);
+            state.selections.add(it.id);
+            persistSelection();
+            render();
+          });
+        });
         chip.addEventListener('click', () => {
           toggleSelection(it.id);
           render();
@@ -1310,15 +1346,60 @@ function shouldHighlight(label) {
   return false;
 }
 
+function ensureDefaultMastery(id) {
+  if (getMastery(id) > 0) return false;
+  state.mastery.set(id, 1);
+  return true;
+}
+
 function toggleSelection(id) {
-  if (state.selections.has(id)) state.selections.delete(id);
-  else state.selections.add(id);
+  let masteryChanged = false;
+  if (state.selections.has(id)) {
+    state.selections.delete(id);
+  } else {
+    state.selections.add(id);
+    masteryChanged = ensureDefaultMastery(id);
+  }
   persistSelection();
+  if (masteryChanged) persistMastery();
 }
 
 function persistSelection() {
   localStorage.setItem('algomap:selected', JSON.stringify([...state.selections]));
 }
+
+function getMastery(id) {
+  return state.mastery.get(id) || 0;
+}
+
+function setMastery(id, value) {
+  const normalized = Math.max(0, Math.min(3, Number(value) || 0));
+  if (normalized <= 0) {
+    state.mastery.delete(id);
+  } else {
+    state.mastery.set(id, normalized);
+  }
+  persistMastery();
+}
+
+function persistMastery() {
+  const payload = Object.fromEntries(state.mastery.entries());
+  localStorage.setItem('algomap:mastery', JSON.stringify(payload));
+}
+
+function renderMasteryStars(id, compact = false) {
+  const current = getMastery(id);
+  const sizeClass = compact ? ' compact' : '';
+  let html = `<div class="mastery-stars${sizeClass}" data-id="${id}" role="group" aria-label="掌握星级">`;
+  for (let i = 1; i <= 3; i += 1) {
+    const active = i <= current ? ' active' : '';
+    const symbol = i <= current ? '★' : '☆';
+    html += `<button type="button" class="mastery-star${active}" data-value="${i}" aria-label="${i} 星">${symbol}</button>`;
+  }
+  html += '</div>';
+  return html;
+}
+
 
 function renderStats(filtered) {
   el.statTotal.textContent = state.algorithms.length;
@@ -1365,9 +1446,24 @@ function renderMindmap(list) {
         node.className = 'mindmap-node' + (state.selections.has(item.id) ? ' selected' : '');
         node.dataset.id = item.id;
         node.innerHTML = `
-          <span class="name">${item.name}</span>
-          ${renderTag(item.level, LEVEL_CLASS[item.level] || '')}
+          <div class="mindmap-node-main">
+            <span class="name">${item.name}</span>
+            ${renderTag(item.level, LEVEL_CLASS[item.level] || '')}
+          </div>
+          ${renderMasteryStars(item.id, true)}
         `;
+        node.querySelectorAll('.mastery-star').forEach(starBtn => {
+          starBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
+            const value = Number(starBtn.dataset.value || 0);
+            const current = getMastery(item.id);
+            const next = current === value ? 1 : value;
+            setMastery(item.id, next);
+            state.selections.add(item.id);
+            persistSelection();
+            render();
+          });
+        });
         node.addEventListener('click', () => {
           toggleSelection(item.id);
           render();
@@ -1399,13 +1495,25 @@ function toBadge(item) {
   return `<span class="export-badge ${levelClass} ${highlight ? 'highlight' : ''}">${item.name}</span>`;
 }
 
+async function captureExportCanvas(target) {
+  const wasHidden = target.classList.contains('hidden');
+  if (wasHidden) target.classList.remove('hidden');
+  target.classList.add('export-render');
+  try {
+    return await window.html2canvas(target, { backgroundColor: '#0b1526', scale: 2 });
+  } finally {
+    target.classList.remove('export-render');
+    if (wasHidden) target.classList.add('hidden');
+  }
+}
+
 async function handleExport(kind) {
   const target = document.getElementById('exportBoard');
   if (!window.html2canvas) {
     alert('html2canvas 加载失败，无法导出。');
     return;
   }
-  const canvas = await window.html2canvas(target, { backgroundColor: '#0b1526', scale: 2 });
+  const canvas = await captureExportCanvas(target);
   const mime = kind === 'jpeg' ? 'image/jpeg' : 'image/png';
   const dataUrl = canvas.toDataURL(mime, 0.95);
 
@@ -1441,11 +1549,7 @@ async function handleMindmapExport() {
   const target = document.getElementById('mindMapView');
   if (!target) return;
 
-  const wasHidden = target.classList.contains('hidden');
-  if (wasHidden) target.classList.remove('hidden');
-
-  const canvas = await window.html2canvas(target, { backgroundColor: '#0b1526', scale: 2 });
-  if (wasHidden) target.classList.add('hidden');
+  const canvas = await captureExportCanvas(target);
 
   const dataUrl = canvas.toDataURL('image/png', 0.95);
 
@@ -1479,10 +1583,7 @@ async function handleModeExport(kind) {
   const isCategory = state.viewMode === 'category';
   const target = isCategory ? document.getElementById('mindMapView') : document.getElementById('algorithmList');
   if (!target) return;
-  const wasHidden = target.classList.contains('hidden');
-  if (wasHidden) target.classList.remove('hidden');
-  const canvas = await window.html2canvas(target, { backgroundColor: '#0b1526', scale: 2 });
-  if (wasHidden) target.classList.add('hidden');
+  const canvas = await captureExportCanvas(target);
   const dataUrl = canvas.toDataURL('image/png', 0.95);
   if (kind === 'pdf') {
     if (!window.jspdf?.jsPDF) {
