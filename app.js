@@ -1,4 +1,4 @@
-// 核心状态
+﻿// 核心状态
 const state = {
   algorithms: [],
   filters: {
@@ -38,11 +38,158 @@ const LEVEL_FILTERS = ['入门', '普及', '提高', '省选', 'NOI'];
 
 const FALLBACK_ALGORITHMS = [
   {
+    "id": "stl-vector",
+    "name": "vector",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-queue",
+    "name": "queue",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-stack",
+    "name": "stack",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-set",
+    "name": "set",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-map",
+    "name": "map",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-unordered-set",
+    "name": "unordered_set",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-unordered-map",
+    "name": "unordered_map",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-deque",
+    "name": "deque",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-priority-queue",
+    "name": "priority_queue",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-list",
+    "name": "list",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-array",
+    "name": "array",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "stl-pair",
+    "name": "pair",
+    "category": "STL",
+    "group": "STL",
+    "level": "入门"
+  },
+  {
+    "id": "syntax-input-output",
+    "name": "输入输出",
+    "category": "语法",
+    "group": "语法",
+    "level": "入门"
+  },
+  {
+    "id": "syntax-variables",
+    "name": "变量",
+    "category": "语法",
+    "group": "语法",
+    "level": "入门"
+  },
+  {
+    "id": "syntax-if-branch",
+    "name": "if分支语句",
+    "category": "语法",
+    "group": "语法",
+    "level": "入门"
+  },
+  {
+    "id": "syntax-for-loop",
+    "name": "for循环",
+    "category": "语法",
+    "group": "语法",
+    "level": "入门"
+  },
+  {
+    "id": "syntax-while-loop",
+    "name": "while循环",
+    "category": "语法",
+    "group": "语法",
+    "level": "入门"
+  },
+  {
+    "id": "syntax-function",
+    "name": "函数",
+    "category": "语法",
+    "group": "语法",
+    "level": "入门"
+  },
+  {
+    "id": "syntax-struct",
+    "name": "结构体",
+    "category": "语法",
+    "group": "语法",
+    "level": "入门"
+  },
+  {
+    "id": "syntax-recursion",
+    "name": "递归",
+    "category": "语法",
+    "group": "语法",
+    "level": "入门"
+  },
+  {
+    "id": "syntax-array-string",
+    "name": "数组与字符串",
+    "category": "语法",
+    "group": "语法",
+    "level": "入门"
+  },
+  {
     "id": "enumerate",
     "name": "枚举 (Enumerate)",
     "category": "基础算法",
     "group": "枚举",
-    "level": "入门"
+    "level": "普及"
   },
   {
     "id": "simulation",
@@ -59,13 +206,6 @@ const FALLBACK_ALGORITHMS = [
     "level": "普及"
   },
   {
-    "id": "recursion",
-    "name": "递归 (Recursion)",
-    "category": "基础算法",
-    "group": "递归与分治",
-    "level": "入门/普及"
-  },
-  {
     "id": "divide-conquer",
     "name": "分治 (Divide & Conquer)",
     "category": "基础算法",
@@ -80,36 +220,8 @@ const FALLBACK_ALGORITHMS = [
     "level": "普及"
   },
   {
-    "id": "selection-sort",
-    "name": "选择排序 (Selection Sort)",
-    "category": "基础算法",
-    "group": "排序",
-    "level": "普及"
-  },
-  {
-    "id": "bubble-sort",
-    "name": "冒泡排序 (Bubble Sort)",
-    "category": "基础算法",
-    "group": "排序",
-    "level": "普及"
-  },
-  {
-    "id": "insertion-sort",
-    "name": "插入排序 (Insertion Sort)",
-    "category": "基础算法",
-    "group": "排序",
-    "level": "普及"
-  },
-  {
-    "id": "sorting-advanced",
-    "name": "快速/归并/堆排序",
-    "category": "基础算法",
-    "group": "排序",
-    "level": "普及"
-  },
-  {
-    "id": "sorting-counting",
-    "name": "计数/桶/基数排序",
+    "id": "sorting",
+    "name": "排序",
     "category": "基础算法",
     "group": "排序",
     "level": "普及"
@@ -155,6 +267,13 @@ const FALLBACK_ALGORITHMS = [
     "category": "基础算法",
     "group": "构造",
     "level": "提高"
+  },
+  {
+    "id": "recursion",
+    "name": "递归 (Recursion)",
+    "category": "搜索",
+    "group": "基础搜索",
+    "level": "普及"
   },
   {
     "id": "dfs",
@@ -434,7 +553,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "进制转换 / 位运算",
     "category": "数学",
     "group": "基础",
-    "level": "入门/普及"
+    "level": "普及"
   },
   {
     "id": "prime-sieve",
@@ -602,7 +721,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "栈 / 队列 / 链表",
     "category": "数据结构",
     "group": "线性结构",
-    "level": "入门/普及"
+    "level": "普及"
   },
   {
     "id": "mono-stack-queue",
@@ -763,7 +882,7 @@ const FALLBACK_ALGORITHMS = [
     "name": "图的存储 / 遍历",
     "category": "图论",
     "group": "基础",
-    "level": "入门/普及"
+    "level": "普及"
   },
   {
     "id": "topo-sort",
@@ -1168,6 +1287,10 @@ function bindControls() {
     filtered.forEach(item => {
       if (state.selections.has(item.id)) {
         state.selections.delete(item.id);
+        if (state.mastery.has(item.id)) {
+          state.mastery.delete(item.id);
+          masteryChanged = true;
+        }
       } else {
         state.selections.add(item.id);
         masteryChanged = ensureDefaultMastery(item.id) || masteryChanged;
@@ -1288,7 +1411,18 @@ function renderLevels(list) {
     block.className = 'level-block';
     block.innerHTML = `<div class="level-title">${lvl} ${renderTag(lvl, LEVEL_CLASS[lvl] || '')}</div>`;
 
-    Object.entries(byLevel[lvl]).forEach(([cat, items]) => {
+    const categoryEntries = Object.entries(byLevel[lvl]);
+    if (lvl === '\u5165\u95e8') {
+      const preferredOrder = { 'STL': 0, '\u8bed\u6cd5': 1 };
+      categoryEntries.sort(([catA], [catB]) => {
+        const rankA = Object.prototype.hasOwnProperty.call(preferredOrder, catA) ? preferredOrder[catA] : 99;
+        const rankB = Object.prototype.hasOwnProperty.call(preferredOrder, catB) ? preferredOrder[catB] : 99;
+        if (rankA !== rankB) return rankA - rankB;
+        return 0;
+      });
+    }
+
+    categoryEntries.forEach(([cat, items]) => {
       const row = document.createElement('div');
       row.className = 'level-cat-row';
       row.innerHTML = `<div class="level-cat-name">${cat}</div>`;
@@ -1356,9 +1490,13 @@ function toggleSelection(id) {
   let masteryChanged = false;
   if (state.selections.has(id)) {
     state.selections.delete(id);
+    if (state.mastery.has(id)) {
+      state.mastery.delete(id);
+      masteryChanged = true;
+    }
   } else {
     state.selections.add(id);
-    masteryChanged = ensureDefaultMastery(id);
+    masteryChanged = ensureDefaultMastery(id) || masteryChanged;
   }
   persistSelection();
   if (masteryChanged) persistMastery();
