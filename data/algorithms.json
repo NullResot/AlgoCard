@@ -315,6 +315,13 @@
     "level": "NOI"
   },
   {
+    "id": "linear-dp",
+    "name": "线性DP",
+    "category": "DP",
+    "group": "DP分组",
+    "level": "普及"
+  },
+  {
     "id": "knapsack-basic",
     "name": "01背包 / 完全 / 多重背包",
     "category": "DP",

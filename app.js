@@ -353,6 +353,13 @@ const FALLBACK_ALGORITHMS = [
     "level": "NOI"
   },
   {
+    "id": "linear-dp",
+    "name": "线性DP",
+    "category": "DP",
+    "group": "DP分组",
+    "level": "普及"
+  },
+  {
     "id": "knapsack-basic",
     "name": "01背包 / 完全 / 多重背包",
     "category": "DP",
@@ -1177,7 +1184,8 @@ const el = {
   resetFilters: document.getElementById('resetFilters'),
   showSelectedBtn: document.getElementById('showSelected'),
   showUnselectedBtn: document.getElementById('showUnselected'),
-  modeExportButtons: Array.from(document.querySelectorAll('[data-mode-export]'))
+  modeExportButtons: Array.from(document.querySelectorAll('[data-mode-export]')),
+  exportCsvBtn: document.getElementById('exportCsv')
 };
 
 init();
@@ -1332,6 +1340,8 @@ function bindControls() {
   el.modeExportButtons.forEach(btn => {
     btn.addEventListener('click', () => handleModeExport(btn.dataset.modeExport));
   });
+
+  el.exportCsvBtn?.addEventListener('click', handleCsvExport);
 
   el.showSelectedBtn.addEventListener('click', () => {
     state.filters.view = 'selected';
@@ -1715,6 +1725,126 @@ async function handleMindmapExport() {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+}
+
+function getCategoryViewOrder(list) {
+  const categoryMap = new Map();
+  list.forEach(item => {
+    const category = item.category || '\u672a\u5206\u7c7b';
+    const group = item.group || '\u672a\u5206\u7ec4';
+    if (!categoryMap.has(category)) categoryMap.set(category, new Map());
+    const groupMap = categoryMap.get(category);
+    if (!groupMap.has(group)) groupMap.set(group, []);
+    groupMap.get(group).push(item);
+  });
+
+  const ordered = [];
+  categoryMap.forEach(groupMap => {
+    groupMap.forEach(items => {
+      ordered.push(...items);
+    });
+  });
+  return ordered;
+}
+
+function getCategoryBlocks(ordered) {
+  const blocks = [];
+  let index = 0;
+  while (index < ordered.length) {
+    const category = ordered[index].category || '\u672a\u5206\u7c7b';
+    let next = index + 1;
+    while (next < ordered.length) {
+      const nextCategory = ordered[next].category || '\u672a\u5206\u7c7b';
+      if (nextCategory !== category) break;
+      next += 1;
+    }
+    blocks.push({ name: category, count: next - index });
+    index = next;
+  }
+  return blocks;
+}
+
+function xmlEscape(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function downloadExcelXml(fileName, xmlContent) {
+  const blob = new Blob(['\uFEFF', xmlContent], {
+    type: 'application/vnd.ms-excel;charset=utf-8;'
+  });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(link.href);
+}
+
+function handleCsvExport() {
+  const nicknameInput = window.prompt('\u8bf7\u8f93\u5165\u6635\u79f0\uff08\u9009\u586b\uff09', '');
+  if (nicknameInput === null) return;
+
+  const ordered = getCategoryViewOrder(state.algorithms);
+  if (!ordered.length) {
+    alert('\u5f53\u524d\u6ca1\u6709\u53ef\u5bfc\u51fa\u7684\u7b97\u6cd5\u6570\u636e\u3002');
+    return;
+  }
+
+  const nickname = nicknameInput.trim();
+  const categoryBlocks = getCategoryBlocks(ordered);
+  const stars = ordered.map(item => (
+    state.selections.has(item.id)
+      ? Math.max(1, getMastery(item.id))
+      : 0
+  ));
+
+  const row1Cells = ['<Cell/>' ];
+  categoryBlocks.forEach(block => {
+    const mergeAcross = Math.max(0, block.count - 1);
+    row1Cells.push(
+      '<Cell ss:MergeAcross="' + mergeAcross + '"><Data ss:Type="String">' + xmlEscape(block.name) + '</Data></Cell>'
+    );
+  });
+
+  const row2Cells = ['<Cell/>' ];
+  ordered.forEach(item => {
+    row2Cells.push(
+      '<Cell><Data ss:Type="String">' + xmlEscape(item.name || item.id) + '</Data></Cell>'
+    );
+  });
+
+  const row3Cells = [
+    '<Cell><Data ss:Type="String">' + xmlEscape(nickname) + '</Data></Cell>'
+  ];
+  stars.forEach(value => {
+    row3Cells.push('<Cell><Data ss:Type="Number">' + value + '</Data></Cell>');
+  });
+
+  const xml = [
+    '<?xml version="1.0"?>',
+    '<?mso-application progid="Excel.Sheet"?>',
+    '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"',
+    ' xmlns:o="urn:schemas-microsoft-com:office:office"',
+    ' xmlns:x="urn:schemas-microsoft-com:office:excel"',
+    ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"',
+    ' xmlns:html="http://www.w3.org/TR/REC-html40">',
+    '  <Worksheet ss:Name="AlgoCard">',
+    '    <Table>',
+    '      <Row>' + row1Cells.join('') + '</Row>',
+    '      <Row>' + row2Cells.join('') + '</Row>',
+    '      <Row>' + row3Cells.join('') + '</Row>',
+    '    </Table>',
+    '  </Worksheet>',
+    '</Workbook>'
+  ].join('\n');
+
+  downloadExcelXml('algocard-mastery.xls', xml);
 }
 
 async function handleModeExport(kind) {
